@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+    <property name="LOG_FILE" value="D:/Project-Log/payment-center/project.log"/>
+    <property name="LOG_PATTERN"
+              value="%d{HH:mm:ss} [${LOG_LEVEL_PATTERN:-%5p}] [%11.11X{DIAGNOSTIC_UID}] [%-40.40logger{39} %5line{5}] : %msg%n"/>
+    <property name="LOG_PATTERN_TWO"
+              value="%d{yyyy-MM-dd HH:mm:ss} [${LOG_LEVEL_PATTERN:-%5p}] [%11.11X{DIAGNOSTIC_UID}] [%-40.40logger{39} %5line{5}] : %msg%n"/>
+
+    <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
+    <appender name="TIME_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <encoder>
+            <pattern>${LOG_PATTERN_TWO}</pattern>
+        </encoder>
+        <file>${LOG_FILE}</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_FILE}.%d{yyyy-MM-dd-HH}.%i</fileNamePattern>
+            <maxHistory>365</maxHistory>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>100MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+    </appender>
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <charset>utf-8</charset>
+            <Pattern>${LOG_PATTERN}</Pattern>
+        </encoder>
+    </appender>
+    <logger name="com.fgt" level="debug"/>
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="TIME_FILE"/>
+    </root>
+</configuration>
