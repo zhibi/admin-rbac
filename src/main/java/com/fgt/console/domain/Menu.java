@@ -1,15 +1,18 @@
 package com.fgt.console.domain;
 
 import com.fgt.common.model.BaseEntity;
-import javax.validation.constraints.NotEmpty;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Transient;
+import javax.validation.constraints.NotEmpty;
 import java.util.List;
 
 /**
  * @author 执笔
  */
-public class Menu extends BaseEntity{
+public class Menu extends BaseEntity {
 
     @Id
     @Column(name = "menu_id")

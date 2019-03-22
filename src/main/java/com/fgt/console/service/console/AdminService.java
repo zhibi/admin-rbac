@@ -1,8 +1,8 @@
 package com.fgt.console.service.console;
 
-import com.fgt.console.mapper.AdminMapper;
-import com.fgt.console.domain.Admin;
 import com.fgt.common.util.CamelCaseUtil;
+import com.fgt.console.domain.Admin;
+import com.fgt.console.mapper.AdminMapper;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -1,7 +1,7 @@
 package com.fgt.console.mapper;
 
-import com.fgt.console.domain.Log;
 import com.fgt.common.core.CustomerMapper;
+import com.fgt.console.domain.Log;
 import org.springframework.stereotype.Service;
 
 /**

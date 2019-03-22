@@ -2,9 +2,9 @@ package com.fgt.console.controller;
 
 import com.fgt.common.core.shiro.CustomerAuthenticationToken;
 import com.fgt.common.core.utils.ShiroUtil;
+import com.fgt.common.util.IpUtil;
 import com.fgt.console.model.valid.ValidAdmin;
 import com.fgt.console.service.console.LogService;
-import com.fgt.common.util.IpUtil;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.session.Session;

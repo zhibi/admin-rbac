@@ -1,7 +1,7 @@
 package com.fgt.console.mapper;
 
-import com.fgt.console.domain.Role;
 import com.fgt.common.core.CustomerMapper;
+import com.fgt.console.domain.Role;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

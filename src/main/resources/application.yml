@@ -3,7 +3,6 @@ server:
     # session最大超时时间(分钟)，默认为30
     session:
       timeout: 60m
-  port: 80
 #日志配置
 logging:
   path: logback-spring.xml

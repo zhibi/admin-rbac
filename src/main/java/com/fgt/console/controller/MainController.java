@@ -1,6 +1,7 @@
 package com.fgt.console.controller;
 
 import com.fgt.common.core.utils.ShiroUtil;
+import com.fgt.common.util.ReturnUtil;
 import com.fgt.console.domain.Admin;
 import com.fgt.console.domain.Menu;
 import com.fgt.console.domain.MenuTree;
@@ -8,7 +9,6 @@ import com.fgt.console.domain.Role;
 import com.fgt.console.service.console.AdminService;
 import com.fgt.console.service.console.MenuService;
 import com.fgt.console.service.console.RoleService;
-import com.fgt.common.util.ReturnUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

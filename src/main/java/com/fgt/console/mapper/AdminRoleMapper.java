@@ -1,7 +1,7 @@
 package com.fgt.console.mapper;
 
-import com.fgt.console.domain.AdminRole;
 import com.fgt.common.core.CustomerMapper;
+import com.fgt.console.domain.AdminRole;
 import org.springframework.stereotype.Service;
 
 /**

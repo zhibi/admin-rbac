@@ -1,8 +1,8 @@
 package com.fgt.console.controller;
 
+import com.fgt.common.util.ReturnUtil;
 import com.fgt.console.domain.Log;
 import com.fgt.console.service.console.LogService;
-import com.fgt.common.util.ReturnUtil;
 import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

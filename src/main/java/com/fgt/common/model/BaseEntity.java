@@ -1,6 +1,6 @@
 package com.fgt.common.model;
 
-import javax.persistence.*;
+import javax.persistence.Transient;
 
 /**
  * model基础信息

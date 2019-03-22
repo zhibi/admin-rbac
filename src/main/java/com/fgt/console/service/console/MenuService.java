@@ -1,7 +1,7 @@
 package com.fgt.console.service.console;
 
-import com.fgt.console.mapper.MenuMapper;
 import com.fgt.console.domain.Menu;
+import com.fgt.console.mapper.MenuMapper;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -96,7 +96,7 @@ public class MenuService {
         menuMapper.updateByExampleSelective(menu, example);
     }
 
-    public List<Menu> getChildMenuList(ArrayList<Menu> menuLists ,String parentId){
+    public List<Menu> getChildMenuList(ArrayList<Menu> menuLists , String parentId){
         Example example = new Example(Menu.class);
         example.createCriteria().andCondition("parent_id = ", parentId);
         PageHelper.orderBy("listorder asc, created_at desc");

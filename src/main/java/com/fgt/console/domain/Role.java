@@ -3,9 +3,12 @@ package com.fgt.console.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fgt.common.model.BaseEntity;
 import org.apache.commons.lang3.StringUtils;
-import javax.validation.constraints.NotEmpty;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Transient;
+import javax.validation.constraints.NotEmpty;
 import java.util.List;
 
 /**

@@ -1,7 +1,7 @@
 package com.fgt.console.service.console;
 
-import com.fgt.console.mapper.RoleMenuMapper;
 import com.fgt.console.domain.RoleMenu;
+import com.fgt.console.mapper.RoleMenuMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
