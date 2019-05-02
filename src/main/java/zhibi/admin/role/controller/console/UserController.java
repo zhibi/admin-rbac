@@ -118,28 +118,4 @@ public class UserController extends BaseController {
         return ReturnUtils.success("删除成功", null, null);
     }
 
-    @Operation("修改用户密码")
-    @RequestMapping(value = "/modifyPwd", method = {RequestMethod.POST})
-    @ResponseBody
-    public ModelMap modifyPwd(Integer id, String password) {
-        try {
-            if (id != null && StringUtils.isNotEmpty(password)) {
-                User user = userMapper.selectByPrimaryKey(id);
-                if (null != user) {
-                    String newPassword = PasswordUtils.createPwd(password, user.getSalt());
-                    user.setPassword(newPassword);
-                    userMapper.updateByPrimaryKeySelective(user);
-                    return ReturnUtils.success("操作成功", null, null);
-                } else {
-                    return ReturnUtils.error("对像不存在，修改失败", null, null);
-                }
-            } else {
-                return ReturnUtils.error("参数错误，修改失败", null, null);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ReturnUtils.error("修改失败", null, null);
-        }
-    }
-
 }

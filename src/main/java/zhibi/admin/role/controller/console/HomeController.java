@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import zhibi.admin.role.common.annotation.Operation;
 import zhibi.admin.role.common.controller.BaseController;
+import zhibi.admin.role.common.utils.PasswordUtils;
 import zhibi.admin.role.common.utils.ShiroUtils;
 import zhibi.admin.role.domain.Menu;
 import zhibi.admin.role.domain.Role;
@@ -52,9 +53,6 @@ public class HomeController extends BaseController {
      */
     @RequestMapping(value = "index", method = {RequestMethod.GET})
     public String index(Model model) {
-        // TODO 方便调试
-        List<MenuDTO> treeGridList = this.getMenu(ShiroUtils.getUserInfo());
-        session.setAttribute("menuList", treeGridList);
         return "console/index";
     }
 
@@ -168,6 +166,7 @@ public class HomeController extends BaseController {
 
     /**
      * 退出登录
+     *
      * @param redirectAttributes
      * @return
      */
@@ -178,5 +177,35 @@ public class HomeController extends BaseController {
         SecurityUtils.getSubject().logout();
         redirectAttributes.addFlashAttribute(ERROR_MESSAGE, "您已安全退出");
         return "redirect:login";
+    }
+
+    /**
+     * 修改密码
+     *
+     * @return
+     */
+    @RequestMapping(value = "/modifyPwd", method = {RequestMethod.GET})
+    public String modifyPwd() {
+        return "console/modify-pwd";
+    }
+
+    @Operation("修改用户密码")
+    @RequestMapping(value = "/modifyPwd", method = {RequestMethod.POST})
+    public String modifyPwd(String pwd, String password, String password2, RedirectAttributes attributes) {
+        if (!password.equals(password2)) {
+            return redirect("/console/modifyPwd", "两次密码不一样", attributes);
+        }
+        User user = userMapper.selectByPrimaryKey(ShiroUtils.getUserInfo().getId());
+        if (null != user) {
+            if (!PasswordUtils.createPwd(pwd, user.getSalt()).equalsIgnoreCase(user.getPassword())) {
+                return redirect("/console/modifyPwd", "原密码错误", attributes);
+            }
+            String newPassword = PasswordUtils.createPwd(password, user.getSalt());
+            user.setPassword(newPassword);
+            userMapper.updateByPrimaryKeySelective(user);
+            return redirect("/console/modifyPwd", "修改成功", attributes);
+        } else {
+            return redirect("/console/modifyPwd", "对像不存在，修改失败", attributes);
+        }
     }
 }
