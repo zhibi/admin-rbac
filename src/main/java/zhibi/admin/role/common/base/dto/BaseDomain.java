@@ -1,5 +1,6 @@
 package zhibi.admin.role.common.base.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
 import zhibi.admin.role.common.mybatis.annotation.AutoTime;
@@ -26,8 +27,10 @@ public class BaseDomain {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer       id;
     @AutoTime(insert = true, update = false)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private LocalDateTime createTime;
     @AutoTime(insert = true, update = true)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private LocalDateTime updateTime;
 
 

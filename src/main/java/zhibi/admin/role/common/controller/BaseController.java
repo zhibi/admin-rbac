@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import zhibi.admin.role.common.context.Constant;
 
 import javax.servlet.http.HttpServletRequest;
@@ -22,7 +23,7 @@ public abstract class BaseController implements Constant {
     @Autowired
     protected HttpSession        session;
     @Autowired
-    protected   HttpServletRequest request;
+    protected HttpServletRequest request;
 
     /**
      * 刷新页面
@@ -44,4 +45,16 @@ public abstract class BaseController implements Constant {
         return "redirect:" + viewName;
     }
 
+    protected String redirect(String viewName, String message, RedirectAttributes attributes) {
+        attributes.addFlashAttribute(ERROR_MESSAGE, message);
+        return "redirect:" + viewName;
+    }
+
+    /**
+     * @param message
+     * @return
+     */
+    protected String refresh(String message) {
+        return "redirect:" + request.getHeader("Referer");
+    }
 }

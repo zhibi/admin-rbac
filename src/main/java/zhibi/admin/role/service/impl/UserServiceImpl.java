@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import zhibi.admin.role.common.base.service.BaseServiceImpl;
 import zhibi.admin.role.common.exception.MessageException;
+import zhibi.admin.role.common.mybatis.condition.MybatisCondition;
 import zhibi.admin.role.common.utils.PasswordUtils;
 import zhibi.admin.role.domain.User;
 import zhibi.admin.role.domain.UserRole;
@@ -30,7 +31,7 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, User> implement
     @Override
     public void updateOrSaveUser(User user, String[] roleIds) {
         if (user.getId() == null) {
-            boolean exist = isExist(new User().setUsername(user.getUsername()));
+            boolean exist = isExist(new MybatisCondition().eq("username", user.getUsername()));
             if (exist) {
                 throw new MessageException("用户名已存在");
             }
@@ -44,13 +45,19 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, User> implement
             user.setType(User.UserTypeEnum.USER);
             userMapper.insertSelective(user);
         } else {
+            boolean exist = isExist(new MybatisCondition().eq("username", user.getUsername()).eqNot("id", user.getId()));
+            if (exist) {
+                throw new MessageException("用户名已存在");
+            }
             User updateUser = userMapper.selectByPrimaryKey(user.getId());
             if (null != updateUser) {
-                if (!StringUtils.isEmpty(user.getPassword())) {
+                if (StringUtils.isNotBlank(user.getPassword())) {
                     String password = PasswordUtils.createPwd(user.getPassword(), updateUser.getSalt());
                     user.setPassword(password);
+                } else {
+                    user.setPassword(null);
                 }
-                userMapper.insertSelective(user);
+                userMapper.updateByPrimaryKeySelective(user);
             } else {
                 throw new MessageException("操作失败，用户不存在");
             }

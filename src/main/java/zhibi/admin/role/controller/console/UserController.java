@@ -4,12 +4,14 @@ import com.github.pagehelper.PageInfo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import zhibi.admin.role.common.annotation.Operation;
+import zhibi.admin.role.common.controller.BaseController;
+import zhibi.admin.role.common.exception.MessageException;
 import zhibi.admin.role.common.utils.PasswordUtils;
 import zhibi.admin.role.common.utils.ReturnUtils;
 import zhibi.admin.role.domain.Role;
@@ -30,7 +32,7 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("console/user")
-public class UserController {
+public class UserController extends BaseController {
 
 
     @Autowired
@@ -65,9 +67,11 @@ public class UserController {
                 checkRoleIds.add(userRoleList.getRoleId() + "");
             }
             checkRoleId = String.join(",", checkRoleIds);
+        } else {
+            user = new User();
         }
         model.addAttribute("checkRoleId", checkRoleId);
-        model.addAttribute("roleLists", roleService.getAllEnable());
+        model.addAttribute("roleList", roleService.getAllEnable());
         model.addAttribute("user", user);
         return "console/user/detail";
     }
@@ -92,19 +96,17 @@ public class UserController {
         return ReturnUtils.success("加载成功", map, null);
     }
 
-    @Transactional
     @Operation("更新用户信息")
     @RequestMapping(value = "/merge", method = {RequestMethod.POST})
-    @ResponseBody
-    public ModelMap merge(@Valid User user, BindingResult result, @RequestParam(defaultValue = "") String roleIds) {
+    public String merge(@Valid User user, BindingResult result, @RequestParam(defaultValue = "") String roleIds, RedirectAttributes attributes) {
         try {
             if (result.hasErrors()) {
-                return ReturnUtils.error(result.getAllErrors().get(0).getDefaultMessage(), null, null);
+                throw new MessageException(result.getAllErrors().get(0).getDefaultMessage());
             }
             userService.updateOrSaveUser(user, roleIds.split(","));
-            return ReturnUtils.success("操作成功", null, "/console/user/index");
+            return redirect("/console/user/index", "操作成功", attributes);
         } catch (Exception e) {
-            return ReturnUtils.error(e.getMessage(), null, null);
+            throw new MessageException(e.getMessage());
         }
     }
 

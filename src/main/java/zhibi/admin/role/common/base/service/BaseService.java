@@ -38,9 +38,9 @@ public interface BaseService<T extends BaseDomain> {
 
     /**
      * 判断是否存在
-     * @param dto
+     * @param condition
      * @return
      */
-    boolean isExist(T dto);
+    boolean isExist(MybatisCondition condition);
 
 }

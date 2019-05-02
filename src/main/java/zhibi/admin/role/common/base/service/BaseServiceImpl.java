@@ -42,8 +42,8 @@ public abstract class BaseServiceImpl<E extends Mapper<T>, T extends BaseDomain>
     }
 
     @Override
-    public boolean isExist(T dto) {
-        int count = mapper.selectCount(dto);
+    public boolean isExist(MybatisCondition condition) {
+        int count = mapper.selectCountByExample(condition);
         return count != 0;
     }
 

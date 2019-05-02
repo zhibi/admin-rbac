@@ -7,10 +7,30 @@
   <small>列表管理</small>
 </section>
 <section class="content table-content">
+  <#if errorMessage??>
+    <div class="alert alert-success alert-dismissible fade in" role="alert">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
+      </button>
+      ${errorMessage!}
+    </div>
+  </#if>
+
   <table id="dataGrid"></table>
 </section>
 <div id="toolbar">
-  <a href="/console/user/add" class="btn btn-primary">添加用户</a>
+  <form role="form" id="searchForm" class="form-inline">
+    <div>
+      <div class="input-group">
+        <span class="input-group-addon">用户名</span>
+        <input type="text" class="form-control" name="username">
+      </div>
+    </div>
+    <div>
+      <button type="button" id="searchBtn" class="btn btn-primary">查询</button>
+      <button type="reset" class="btn btn-warning">清空</button>
+    </div>
+  </form>
+  <a href="/console/user/detail/0" class="btn btn-primary">添加用户</a>
 </div>
 <#include "../common/footer.html"/>
 <#include "../common/bootstrap-table.html"/>
@@ -34,7 +54,7 @@
             {title: "用户Id", field: "id"},
             {title: "用户名", field: "username"},
             {title: "角色", field: "roleList", formatter: getRole},
-            {title: "注册时间", field: "addTime"},
+            {title: "注册时间", field: "createTime"},
             {title: "操作", field: "operate", align: 'center', events: operateEvents, formatter: operateFormatter}
         ]);
     });

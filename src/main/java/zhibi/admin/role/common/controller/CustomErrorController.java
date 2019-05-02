@@ -44,7 +44,7 @@ public class CustomErrorController extends BasicErrorController {
     public ModelAndView errorHtml(HttpServletRequest request, HttpServletResponse response) {
         Map<String, Object> model = Collections.unmodifiableMap(this.getErrorAttributes(request, this.isIncludeStackTrace(request, MediaType.TEXT_HTML)));
         logger.error("【HTML ERROR】 {}", model);
-        return new ModelAndView("error", model);
+        return new ModelAndView("console/error", model);
     }
 
     @Override
