@@ -27,7 +27,6 @@ public class Menu extends BaseDomain {
     @NotEmpty(message = "菜单标识不能为空")
     private String code;
 
-    @NotEmpty(message = "父类ID不能为空")
     private Integer parentId;
 
     private Integer childNum;

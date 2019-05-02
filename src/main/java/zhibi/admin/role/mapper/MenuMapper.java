@@ -50,4 +50,10 @@ public interface MenuMapper extends CustomerMapper<Menu> {
      * @return
      */
     List<Menu> selectMenuByRoleId(Integer roleId);
+
+    /**
+     * 删除菜单
+     * @param id
+     */
+    void deleteById(Integer id);
 }

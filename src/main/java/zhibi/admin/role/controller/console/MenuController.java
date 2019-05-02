@@ -1,23 +1,27 @@
 package zhibi.admin.role.controller.console;
 
+import com.github.pagehelper.PageInfo;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import zhibi.admin.role.common.annotation.Operation;
 import zhibi.admin.role.common.controller.BaseController;
+import zhibi.admin.role.common.exception.MessageException;
+import zhibi.admin.role.common.mybatis.condition.MybatisCondition;
 import zhibi.admin.role.common.utils.ReturnUtils;
 import zhibi.admin.role.domain.Menu;
 import zhibi.admin.role.dto.MenuDTO;
 import zhibi.admin.role.dto.MenuTree;
 import zhibi.admin.role.mapper.MenuMapper;
 import zhibi.admin.role.service.MenuService;
-import zhibi.admin.role.service.RoleMenuService;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +29,7 @@ import java.util.List;
  * @author 执笔
  */
 @Controller
-@RequestMapping("/menu")
+@RequestMapping("/console/menu")
 @RequiresAuthentication
 public class MenuController extends BaseController {
 
@@ -35,123 +39,79 @@ public class MenuController extends BaseController {
     @Autowired
     private MenuMapper  menuMapper;
 
-    @Autowired
-    private RoleMenuService roleMenuService;
-
     @Operation("菜单列表")
     @RequestMapping(value = "/index", method = {RequestMethod.GET})
     public String index(Model model) {
         ArrayList<Menu> menuLists = new ArrayList<>();
         List<Menu>      lists     = menuService.getChildMenuList(menuLists, 0);
         model.addAttribute("menus", lists);
-        return "menu/list";
+        return "console/menu/index";
     }
 
+    /**
+     * 菜单列表
+     *
+     * @return
+     */
     @RequestMapping(value = "/list", method = {RequestMethod.GET})
     @ResponseBody
-    public ModelMap list() {
-        ModelMap      map          = new ModelMap();
-        List<Menu>    list         = menuMapper.selectAllMenu();
-        MenuTree      menuTreeUtil = new MenuTree(list, null);
-        List<MenuDTO> treeGridList = menuTreeUtil.buildTreeGrid();
+    public ModelMap list(Menu menu) {
+        ModelMap       map          = new ModelMap();
+        PageInfo<Menu> pageInfo     = menuService.selectPage(menu);
+        MenuTree       menuTreeUtil = new MenuTree(pageInfo.getList(), null);
+        List<MenuDTO>  treeGridList = menuTreeUtil.buildTreeGrid();
         map.put("treeList", treeGridList);
-        map.put("total", list.size());
+        map.put("total", pageInfo.getTotal());
         return ReturnUtils.success("加载成功", map, null);
     }
 
-   /* @RequiresPermissions("console:edit")
-    @RequestMapping(value = "/from", method = {RequestMethod.GET})
-    public String add(Menu menu, Model model) {
-        if (StringUtils.isEmpty(menu.getParentId())) {
-            menu.setParentId("0");
-        }
-        if (!StringUtils.isEmpty(menu.getMenuId())) {
-            menu = menuService.getById(menu.getMenuId());
-            if (!"null".equals(menu)) {
-                menu.setUpdatedAt(DateUtil.getCurrentTime());
-            }
+    @Operation("删除菜单")
+    @ResponseBody
+    @RequestMapping(value = "/delete", method = {RequestMethod.GET})
+    public ModelMap delete(Integer id) {
+        menuMapper.deleteById(id);
+        return ReturnUtils.success("删除成功", null, null);
+    }
+
+    /**
+     * 菜单详情
+     *
+     * @param id
+     * @param parentId
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "/detail/{id}", method = {RequestMethod.GET})
+    public String add(@PathVariable Integer id, @RequestParam(defaultValue = "0") Integer parentId, Model model) {
+        Menu menu;
+        if (id != 0) {
+            menu = menuMapper.selectByPrimaryKey(id);
         } else {
-            menu.setChildNum(0);
-            menu.setListorder(0);
-            menu.setMenuType("menu");
-            menu.setCreatedAt(DateUtil.getCurrentTime());
-            menu.setUpdatedAt(DateUtil.getCurrentTime());
+            menu = new Menu();
+            menu.setParentId(parentId);
         }
         model.addAttribute("menu", menu);
-        return "console/menu/from";
+        return "console/menu/detail";
     }
 
-    @RequiresPermissions("menu:save")
-    @RequestMapping(value = "/save", method = {RequestMethod.POST})
+    @RequestMapping(value = "/merge", method = {RequestMethod.POST})
     @Transactional
-    @ResponseBody
-    public ModelMap save(@Valid Menu menu, BindingResult result) {
-        try {
-            if (result.hasErrors()) {
-                for (ObjectError er : result.getAllErrors()) {
-                    return ReturnUtils.error(er.getDefaultMessage(), null, null);
-                }
-            }
-            if (StringUtils.isEmpty(menu.getMenuId())) {
-                String id = UuidUtil.getUUID();
-                menu.setMenuId(id);
-                menuService.insert(menu);
-            } else {
-                menuService.save(menu);
-            }
-            if (!"0".equals(menu.getParentId())) {
-                //更新父类总数
-                Example example = new Example(Menu.class);
-                example.createCriteria().andCondition("parent_id = ", menu.getParentId());
-                Integer parentCount = menuService.getCount(example);
-                Menu    parentMenu  = menuService.getById(menu.getParentId());
-                menuService.getById(menu.getParentId());
-                parentMenu.setChildNum(parentCount);
-                menuService.save(parentMenu);
-            }
-            return ReturnUtils.success("操作成功", null, "/console/menu/index");
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ReturnUtils.error("操作失败", null, null);
+    public String save(@Valid Menu menu, BindingResult result, RedirectAttributes attributes) {
+        if (result.hasErrors()) {
+            throw new MessageException(result.getAllErrors().get(0).getDefaultMessage());
         }
+        menuService.merge(menu);
+        if (menu.getParentId() != 0) {
+            //更新父类总数
+            MybatisCondition example = new MybatisCondition()
+                    .eq("parent_id", menu.getParentId());
+            Integer parentCount = menuMapper.selectCountByExample(example);
+            Menu    parentMenu  = menuMapper.selectByPrimaryKey(menu.getParentId());
+            parentMenu.setChildNum(parentCount);
+            menuMapper.updateByPrimaryKeySelective(parentMenu);
+        }
+        return redirect("/console/menu/index", "操作成功", attributes);
     }
-
-    @RequiresPermissions("menu:listorder")
-    @RequestMapping(value = "/listorder", method = {RequestMethod.POST})
-    @ResponseBody
-    public ModelMap updateOrder(String id, Integer listorder) {
-        if (StringUtils.isNotBlank(id)) {
-            Menu menu = new Menu();
-            menu.setListorder(listorder);
-            Example example = new Example(Menu.class);
-            example.createCriteria()
-                    .andCondition("menu_id = ", id);
-            menuService.update(menu, example);
-            return ReturnUtils.success("success", null, null);
-        } else {
-            return ReturnUtils.error("error", null, null);
-        }
-    }
-
-    @ResponseBody
-    @RequiresPermissions("menu:delete")
-    @RequestMapping(value = "/delete", method = {RequestMethod.GET})
-    public ModelMap delete(String[] ids) {
-        try {
-            if ("null".equals(ids) || "".equals(ids)) {
-                return ReturnUtils.error("error", null, null);
-            } else {
-                for (String id : ids) {
-                    roleMenuService.deleteMenuId(id);
-                    menuService.deleteById(id);
-                }
-                return ReturnUtils.success("success", null, null);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ReturnUtils.error("error", null, null);
-        }
-    }*/
 
 
 }

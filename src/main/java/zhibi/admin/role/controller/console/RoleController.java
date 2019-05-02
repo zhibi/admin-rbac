@@ -162,35 +162,4 @@ public class RoleController extends BaseController {
         List<Map<String, Object>> mapList       = menuTreeUtil.buildTree();
         return ReturnUtils.success(null, mapList, null);
     }
-
-
-   /* @RequestMapping(value = "/combobox", method = {RequestMethod.POST, RequestMethod.GET})
-    @ResponseBody
-    public ModelMap comboBox() {
-        ModelMap   map      = new ModelMap();
-        List<Role> roleList = roleService.getFromAll();
-        map.put("roleList", roleList);
-        return ReturnUtils.success(null, map, null);
-    }*/
-
-   /*
-
-
-
-
-    @RequestMapping(value = "/menulist", method = {RequestMethod.GET})
-    @ResponseBody
-    public ModelMap menulist(String id) {
-        ModelMap map      = new ModelMap();
-        RoleMenu roleMenu = new RoleMenu();
-        roleMenu.setRoleId(id);
-        List<RoleMenu>    roleMenuLists = roleMenuService.getRoleList(roleMenu);
-        ArrayList<String> roleList      = new ArrayList<>();
-        for (RoleMenu roleMenuList : roleMenuLists) {
-            roleList.add(roleMenuList.getMenuId());
-        }
-        map.put("id", id);
-        map.put("roleList", roleList);
-        return ReturnUtils.success("操作成功", map, null);
-    }*/
 }
