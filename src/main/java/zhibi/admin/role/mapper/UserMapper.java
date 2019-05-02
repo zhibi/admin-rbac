@@ -22,5 +22,5 @@ public interface UserMapper extends CustomerMapper<User> {
      *
      * @param id
      */
-    void deleteById(String id);
+    void deleteById(Integer id);
 }

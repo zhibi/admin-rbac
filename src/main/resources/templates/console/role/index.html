@@ -1,59 +1,71 @@
 <!DOCTYPE HTML>
-<html lang="en"
-      xmlns:th="http://www.thymeleaf.org">
-<head th:include="console/header">
-</head>
+<
+<html lang="en">
+<#include "../common/head.html"/>
 <body>
 <section class="content-header">
-    <h1>角色管理</h1>
-    <small>列表管理</small>
+  <h1>角色管理</h1>
+  <small>角色列表</small>
 </section>
 <section class="content table-content">
-    <table id="dataGrid"></table>
+  <#if errorMessage??>
+    <div class="alert alert-success alert-dismissible fade in" role="alert">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
+      </button>
+      ${errorMessage!}
+    </div>
+  </#if>
+  <table id="dataGrid"></table>
 </section>
 <div id="toolbar">
-    <a href="/console/role/from" class="btn btn-primary" >添加角色</a>
+  <form role="form" id="searchForm" class="form-inline">
+    <div>
+      <div class="input-group">
+        <span class="input-group-addon">角色名</span>
+        <input type="text" class="form-control" name="name">
+      </div>
+    </div>
+    <div>
+      <button type="button" id="searchBtn" class="btn btn-primary">查询</button>
+      <button type="reset" class="btn btn-warning">清空</button>
+    </div>
+  </form>
+  <a href="/console/role/detail/0" class="btn btn-primary">添加角色</a>
 </div>
-<div th:include="console/footer"></div>
-
+<#include "../common/footer.html"/>
+<#include "../common/bootstrap-table.html"/>
 
 <script type="text/javascript">
-    $table = $("#dataGrid");
+
+    /**
+     * 表单初始化
+     */
     $(function () {
-        initDataGrid();
-    });
-    function initDataGrid(){
-        $table.bootstrapTable({
-            height : tableModel.getHeight(),
-            idField : "roleId",
-            columns: [
-                {title: "角色名称", field: "roleName"},
-                {title: "角色描述", field: "roleDesc"},
-                {title: "启用状态", field: "enable", formatter : tableModel.getState},
-                {title: "创建时间", field: "createdAt", sortable: true},
-                {title: "更新日期", field: "updatedAt", sortable: true},
-                {title: "操作", field: "operate", align: 'center', events: operateEvents, formatter: operateFormatter}
-            ],
-            url: '/console/role/list',
-            queryParams: function(params){
-                return params;
-            },
-            responseHandler : function (res) {
-                return {
-                    rows : res.result.pageInfo.list,
-                    total : res.result.pageInfo.total
+        initDataGrid('/console/role/list', [
+            {
+                title: "序号", field: "id", formatter: function (value, row, index) {
+                    //获取每页显示的数量
+                    var pageSize = $table.bootstrapTable('getOptions').pageSize;
+                    //获取当前是第几页
+                    var pageNumber = $table.bootstrapTable('getOptions').pageNumber;
+                    //返回序号，注意index是从0开始的，所以要加上1
+                    return pageSize * (pageNumber - 1) + index + 1;
                 }
             },
-            sortName : 'createdAt',
-            sortOrder : 'asc',
-            pagination : true,
-            sidePagination : 'server',
-            pageSize: 20,
-            pageList : [20, 40, 50, 100],
-            toolbar : "#toolbar",
-            showRefresh : true,
-            showToggle : true
-        });
+            {title: "角色名称", field: "name"},
+            {title: "启用状态", field: "enable", formatter: getState},
+            {title: "创建时间", field: "createTime"},
+            {title: "更新日期", field: "updateTime"},
+            {title: "操作", field: "operate", align: 'center', events: operateEvents, formatter: operateFormatter}
+        ]);
+    });
+
+    function getState(value, row, index) {
+        if (row.enable === true) {
+            return "启用"
+        } else {
+            return "禁用";
+        }
     }
 
     function operateFormatter(value, row, index) {
@@ -61,7 +73,7 @@
             '<a class="grant" href="javascript:void(0);" >',
             '<i class="glyphicon glyphicon-edit"></i>授权',
             '</a>  ',
-            '<a href="/console/role/from?roleId='+row.roleId+'" >',
+            '<a href="/console/role/detail/' + row.id + '" >',
             '<i class="glyphicon glyphicon-edit"></i>修改',
             '</a>  ',
             '<a class="remove" href="javascript:void(0);">',
@@ -71,10 +83,10 @@
     }
 
     window.operateEvents = {
-        'click .remove' : function (e, value, row, index) {
+        'click .remove': function (e, value, row, index) {
             operaModel.delRow(row.roleId, '/console/role/delete', 'roleId');
         },
-        'click .grant' : function (e, value, row, index) {
+        'click .grant': function (e, value, row, index) {
             layer.open({
                 type: 2,
                 title: '角色授权',

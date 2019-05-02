@@ -1,8 +1,6 @@
 package zhibi.admin.role.controller.console;
 
 import com.github.pagehelper.PageInfo;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,31 +10,25 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import zhibi.admin.role.common.annotation.Operation;
 import zhibi.admin.role.common.controller.BaseController;
-import zhibi.admin.role.common.shiro.AdminShiroRealm;
+import zhibi.admin.role.common.exception.MessageException;
 import zhibi.admin.role.common.utils.ReturnUtils;
 import zhibi.admin.role.domain.Menu;
 import zhibi.admin.role.domain.Role;
-import zhibi.admin.role.domain.RoleMenu;
-import zhibi.admin.role.dto.MenuTree;
 import zhibi.admin.role.mapper.MenuMapper;
 import zhibi.admin.role.mapper.RoleMapper;
-import zhibi.admin.role.service.MenuService;
-import zhibi.admin.role.service.RoleMenuService;
 import zhibi.admin.role.service.RoleService;
-import zhibi.admin.role.service.UserRoleService;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author 执笔
  */
 @Controller
-@RequestMapping("/role")
+@RequestMapping("/console/role")
 public class RoleController extends BaseController {
 
     @Autowired
@@ -44,25 +36,14 @@ public class RoleController extends BaseController {
     @Autowired
     private RoleMapper  roleMapper;
 
+    @Autowired
+    private MenuMapper menuMapper;
 
-    @Autowired
-    private UserRoleService userRoleService;
-
-    @Autowired
-    private MenuService menuService;
-    @Autowired
-    private MenuMapper  menuMapper;
-
-    @Autowired
-    private RoleMenuService roleMenuService;
-
-    @Autowired
-    private AdminShiroRealm adminShiroRealm;
 
     @Operation("查看角色")
     @RequestMapping(value = "/index", method = {RequestMethod.GET})
     public String index(Model model) {
-        return "role/index";
+        return "console/role/index";
     }
 
     /**
@@ -85,22 +66,31 @@ public class RoleController extends BaseController {
         return ReturnUtils.success("加载成功", map, null);
     }
 
+    /**
+     * 角色列表
+     *
+     * @param id
+     * @param model
+     * @return
+     */
     @RequestMapping(value = "detail/{id}", method = {RequestMethod.GET})
     public String from(@PathVariable Integer id, Model model) {
         Role role = roleMapper.selectByPrimaryKey(id);
+        if (role == null) {
+            role = new Role();
+        }
         model.addAttribute("role", role);
-        return "role/detail";
+        return "console/role/detail";
     }
 
     @Operation("添加更新角色")
     @RequestMapping(value = "/merge", method = {RequestMethod.POST})
-    @ResponseBody
-    public ModelMap save(@Valid Role role, BindingResult result) {
+    public String save(@Valid Role role, BindingResult result, RedirectAttributes attributes) {
         if (result.hasErrors()) {
-            return ReturnUtils.error(result.getAllErrors().get(0).getDefaultMessage(), null, null);
+            throw new MessageException(result.getAllErrors().get(0).getDefaultMessage());
         }
         roleService.merge(role);
-        return ReturnUtils.success("操作成功", null, "/role/index");
+        return redirect("/console/role/index","操作成功", attributes);
     }
 
     @Operation("删除角色")

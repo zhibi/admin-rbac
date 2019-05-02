@@ -65,14 +65,14 @@
             delRow: function (rowid, url, field) {
                 layer.confirm('确定删除吗?', function () {
                     $.getJSON(url, {id: rowid}, function (ret) {
-                        if (ret.code === 200) {
-                            layer.msg(ret.message, {icon: 1});
+                        if (ret.status === 1) {
+                            layer.msg(ret.msg, {icon: 1});
                             $table.bootstrapTable('remove', {
                                 field: field,
                                 values: [rowid]
                             });
                         } else {
-                            layer.msg(ret.message, {icon: 2});
+                            layer.msg(ret.msg, {icon: 2});
                         }
                     });
                 });

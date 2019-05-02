@@ -113,20 +113,9 @@ public class UserController extends BaseController {
     @Operation("删除用户")
     @RequestMapping(value = "/delete", method = {RequestMethod.GET})
     @ResponseBody
-    public ModelMap delete(String[] ids) {
-        try {
-            if (ids != null && ids.length > 0) {
-                for (String id : ids) {
-                    userMapper.deleteById(id);
-                }
-                return ReturnUtils.success("删除成功", null, null);
-            } else {
-                return ReturnUtils.error("删除失败", null, null);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ReturnUtils.error("删除失败", null, null);
-        }
+    public ModelMap delete(Integer id) {
+        userMapper.deleteById(id);
+        return ReturnUtils.success("删除成功", null, null);
     }
 
     @Operation("修改用户密码")

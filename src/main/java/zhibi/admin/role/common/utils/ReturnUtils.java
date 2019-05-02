@@ -20,7 +20,7 @@ public class ReturnUtils {
      */
     public static ModelMap success(String msg, Object obj, String referer) {
         msg = StringUtils.isEmpty(msg) || StringUtils.isBlank(msg) ? "操作成功" : msg;
-        return fullMap(0, "error", msg, referer, obj);
+        return fullMap(1, "success", msg, referer, obj);
     }
 
     /**
@@ -32,7 +32,7 @@ public class ReturnUtils {
      */
     public static ModelMap success(String msg, Object obj) {
         msg = StringUtils.isEmpty(msg) || StringUtils.isBlank(msg) ? "操作成功" : msg;
-        return fullMap(0, "error", msg, null, obj);
+        return fullMap(1, "success", msg, null, obj);
     }
 
     /**
@@ -43,7 +43,7 @@ public class ReturnUtils {
      */
     public static ModelMap success(String msg) {
         msg = StringUtils.isEmpty(msg) || StringUtils.isBlank(msg) ? "操作成功" : msg;
-        return fullMap(0, "error", msg, null, null);
+        return fullMap(1, "success", msg, null, null);
     }
 
     /**

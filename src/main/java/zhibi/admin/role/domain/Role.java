@@ -17,7 +17,7 @@ public class Role extends BaseDomain {
     private String name;
 
     /**
-     * 时候可用
+     * 是否可用
      */
     private Boolean enable;
 
