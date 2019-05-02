@@ -1,0 +1,22 @@
+<ul class="sidebar-menu">
+  <li class="header">控制面板</li>
+  <#list menuList as menu>
+    <li class="treeview">
+      <a href="#">
+        <i class="fa fa-dashboard"></i>
+        <b>${menu.name}</b>
+        <span class="pull-right-container">
+          <i class="fa fa-angle-left pull-right"></i>
+        </span>
+      </a>
+      <ul class="treeview-menu">
+        <#list menu.children as item>
+          <li>
+            <a href="${item.url}" target="mainFrame"><i class="fa fa-cicle-o"></i>
+              <b>${item.name!}</b></a>
+          </li>
+        </#list>
+      </ul>
+    </li>
+  </#list>
+</ul>

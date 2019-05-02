@@ -12,7 +12,7 @@
     <table id="dataGrid"></table>
 </section>
 <div id="toolbar">
-    <a href="/console/admin/from" class="btn btn-primary">添加用户</a>
+    <a href="/console/user/from" class="btn btn-primary">添加用户</a>
 </div>
 <div th:include="console/footer"></div>
 </body>
@@ -33,7 +33,7 @@
                 {title: "更新日期", field: "updatedAt", sortable: true},
                 {title: "操作", field: "operate", align: 'center', events: operateEvents, formatter: operateFormatter}
             ],
-            url : '/console/admin/list',
+            url : '/console/user/list',
             queryParams: function(params){
                 return params;
             },
@@ -71,7 +71,7 @@
     function operateFormatter(value, row, index) {
         if(row.isSystem == 0){
             return [
-                '<a href="/console/admin/from?uid='+row.uid+'" >',
+                '<a href="/console/user/from?uid='+row.uid+'" >',
                 '<i class="glyphicon glyphicon-edit"></i>修改',
                 '</a>  ',
                 '<a class="remove" href="javascript:void(0);">',
@@ -83,7 +83,7 @@
 
     window.operateEvents = {
         'click .remove': function (e, value, row, index) {
-            operaModel.delRow(row.uid, '/console/admin/delete', 'uid');
+            operaModel.delRow(row.uid, '/console/user/delete', 'uid');
         }
     };
 </script>
