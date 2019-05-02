@@ -123,20 +123,16 @@ public class MenuTree {
 
     /**
      * buildTree
-     * 描述:  创建树
-     *
-     * @return List<Map < String, Object>>
-     * @throws
-     * @since 3.0.3.0.1.0.0
+     * 描述:  创建菜单树
      */
     public List<MenuDTO> buildTreeGrid() {
         List<MenuDTO> list = new ArrayList<MenuDTO>();
         for (Menu node : nodes) {
             //这里判断父节点，需要自己更改判断
-            if (node.getId() == 0) {
+            if (node.getParentId() == 0) {
                 MenuDTO       menuDTO = new MenuDTO(node);
-                List<MenuDTO> childs  = buildTreeGridChilds(node);
-                menuDTO.setChildren(childs);
+                List<MenuDTO> children  = buildTreeGridChilds(node);
+                menuDTO.setChildren(children);
                 list.add(menuDTO);
             }
         }

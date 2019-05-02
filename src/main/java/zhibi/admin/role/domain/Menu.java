@@ -34,6 +34,12 @@ public class Menu extends BaseDomain {
 
     private Integer sort;
 
+    /**
+     * 图标
+     * fa fa-dashboard
+     */
+    private String icon;
+
 
     public enum MenuTypeStatus {
         /**
