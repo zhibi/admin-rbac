@@ -1,53 +1,39 @@
 <!DOCTYPE HTML>
-<html lang="en"
-      xmlns:th="http://www.thymeleaf.org">
-<head th:include="console/header">
-</head>
+<html lang="en">
+<#include "../common/head.html"/>
 <body>
 <section class="content-header">
-    <h1>登录日志管理</h1>
+    <h1>日志管理</h1>
+    <small>日志列表</small>
 </section>
 <section class="content table-content">
     <table id="dataGrid"></table>
 </section>
-<div th:include="console/footer"></div>
+<#include "../common/footer.html"/>
+<#include "../common/bootstrap-table.html"/>
 </body>
 <script type="text/javascript">
-    $table = $("#dataGrid");
+
+    /**
+     * 表单初始化
+     */
     $(function () {
-        initDataGrid();
-    });
-    function initDataGrid(){
-        $table.bootstrapTable({
-            height : tableModel.getHeight(),
-            idField : "logId",
-            columns : [
-                {title: "操作用户", field: "logUser" },
-                {title: "操作时间", field: "logTime"},
-                {title: "操作IP", field: "logIp"},
-                {title: "操作地址", field: "logAction"}
-            ],
-            url : '/console/log/list',
-            queryParams: function(params){
-                return params;
-            },
-            responseHandler : function (res) {
-                return {
-                    rows : res.result.pageInfo.list,
-                    total : res.result.pageInfo.total
+        initDataGrid('/console/log/list', [
+            {
+                title: "序号", field: "id", formatter: function (value, row, index) {
+                    //获取每页显示的数量
+                    var pageSize = $table.bootstrapTable('getOptions').pageSize;
+                    //获取当前是第几页
+                    var pageNumber = $table.bootstrapTable('getOptions').pageNumber;
+                    //返回序号，注意index是从0开始的，所以要加上1
+                    return pageSize * (pageNumber - 1) + index + 1;
                 }
             },
-            search : true,
-            searchOnEnterKey : true,
-            sortName : 'logTime',
-            sortOrder : 'asc',
-            pagination : true,
-            sidePagination : 'server',
-            pageSize: 10,
-            pageList : [5, 10],
-            showRefresh : true,
-            showToggle : true
-        });
-    }
+            {title: "操作用户", field: "user" },
+            {title: "操作时间", field: "createTime"},
+            {title: "操作IP", field: "ip"},
+            {title: "操作地址", field: "action"}
+        ]);
+    });
 </script>
 </html>

@@ -1,4 +1,4 @@
-package zhibi.admin.role.controller;
+package zhibi.admin.role.controller.console;
 
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +18,7 @@ import zhibi.admin.role.service.LogService;
  * @author 执笔
  */
 @Controller
-@RequestMapping("log")
+@RequestMapping("console/log")
 public class LogController {
 
     @Autowired
@@ -27,7 +27,7 @@ public class LogController {
     @Operation("查看操作日志")
     @RequestMapping(value = "/index", method = {RequestMethod.GET})
     public String index(Model model) {
-        return "log/list";
+        return "console/log/index";
     }
 
     /**

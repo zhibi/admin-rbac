@@ -241,8 +241,8 @@ public class MybatisCondition extends BaseDomain {
      * @return
      */
     public MybatisCondition page(BaseDomain dto) {
-        this.setPageNum(dto.getPageNum());
-        this.setPageSize(dto.getPageSize());
+        this.setLimit(dto.getLimit());
+        this.setOffset(dto.getOffset());
         return this;
     }
 
@@ -251,9 +251,9 @@ public class MybatisCondition extends BaseDomain {
      *
      * @return
      */
-    public MybatisCondition page(Integer pageNum, Integer pageSize) {
-        this.setPageNum(pageNum);
-        this.setPageSize(pageSize);
+    public MybatisCondition page(Integer limit, Integer offset) {
+        this.setLimit(limit);
+        this.setOffset(offset);
         return this;
     }
 }

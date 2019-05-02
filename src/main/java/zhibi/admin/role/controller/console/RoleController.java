@@ -1,4 +1,4 @@
-package zhibi.admin.role.controller;
+package zhibi.admin.role.controller.console;
 
 import com.github.pagehelper.PageInfo;
 import org.apache.commons.lang3.StringUtils;

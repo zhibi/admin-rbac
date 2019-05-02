@@ -1,4 +1,4 @@
-package zhibi.admin.role.controller;
+package zhibi.admin.role.controller.console;
 
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.springframework.beans.factory.annotation.Autowired;

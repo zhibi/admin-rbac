@@ -1,4 +1,4 @@
-package zhibi.admin.role.controller;
+package zhibi.admin.role.controller.console;
 
 import com.github.pagehelper.PageInfo;
 import org.apache.commons.lang3.StringUtils;
@@ -29,7 +29,7 @@ import java.util.List;
  * @author 执笔
  */
 @Controller
-@RequestMapping("user")
+@RequestMapping("console/user")
 public class UserController {
 
 
@@ -47,7 +47,7 @@ public class UserController {
     @Operation("查看用户列表")
     @RequestMapping(value = "/index", method = {RequestMethod.GET})
     public String index(Model model) {
-        return "user/list";
+        return "console/user/index";
     }
 
 
@@ -69,7 +69,7 @@ public class UserController {
         model.addAttribute("checkRoleId", checkRoleId);
         model.addAttribute("roleLists", roleService.getAllEnable());
         model.addAttribute("user", user);
-        return "user/detail";
+        return "console/user/detail";
     }
 
     /**
@@ -102,7 +102,7 @@ public class UserController {
                 return ReturnUtils.error(result.getAllErrors().get(0).getDefaultMessage(), null, null);
             }
             userService.updateOrSaveUser(user, roleIds.split(","));
-            return ReturnUtils.success("操作成功", null, "/user/index");
+            return ReturnUtils.success("操作成功", null, "/console/user/index");
         } catch (Exception e) {
             return ReturnUtils.error(e.getMessage(), null, null);
         }

@@ -33,13 +33,7 @@ public class BaseDomain {
 
     @Transient
     private Integer offset = 0;
-
     @Transient
     private Integer limit = 10;
-
-    @Transient
-    private Integer pageNum  = 0;
-    @Transient
-    private Integer pageSize = 10;
 
 }

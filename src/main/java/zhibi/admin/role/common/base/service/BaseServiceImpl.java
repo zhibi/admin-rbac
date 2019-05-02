@@ -54,6 +54,6 @@ public abstract class BaseServiceImpl<E extends Mapper<T>, T extends BaseDomain>
      * @param dto
      */
     protected void startPage(BaseDomain dto) {
-        PageHelper.startPage(dto.getPageNum(), dto.getPageSize());
+        PageHelper.offsetPage(dto.getOffset(), dto.getLimit());
     }
 }

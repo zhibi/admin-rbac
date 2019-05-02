@@ -10,7 +10,7 @@ import javax.persistence.Table;
 /**
  * @author 执笔
  */
-@Table(name = "admin_role")
+@Table(name = "user_role")
 @Data
 @Accessors(chain = true)
 public class UserRole extends BaseDomain {
