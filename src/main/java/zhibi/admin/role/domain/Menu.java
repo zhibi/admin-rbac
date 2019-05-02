@@ -1,6 +1,7 @@
 package zhibi.admin.role.domain;
 
 import lombok.Data;
+import lombok.experimental.Accessors;
 import zhibi.admin.role.common.base.dto.BaseDomain;
 
 import javax.persistence.Column;
@@ -10,6 +11,7 @@ import javax.validation.constraints.NotEmpty;
  * @author 执笔
  */
 @Data
+@Accessors(chain = true)
 public class Menu extends BaseDomain {
 
 
@@ -27,8 +29,6 @@ public class Menu extends BaseDomain {
 
     @NotEmpty(message = "父类ID不能为空")
     private Integer parentId;
-
-    private String parentIds;
 
     private Integer childNum;
 

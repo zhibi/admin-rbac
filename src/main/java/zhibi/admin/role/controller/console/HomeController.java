@@ -52,6 +52,9 @@ public class HomeController extends BaseController {
      */
     @RequestMapping(value = "index", method = {RequestMethod.GET})
     public String index(Model model) {
+        // TODO 方便调试
+        List<MenuDTO> treeGridList = this.getMenu(ShiroUtils.getUserInfo());
+        session.setAttribute("menuList", treeGridList);
         return "console/index";
     }
 

@@ -1,7 +1,7 @@
 package zhibi.admin.role.dto;
 
 import lombok.Data;
-import org.apache.commons.beanutils.BeanUtils;
+import org.springframework.beans.BeanUtils;
 import zhibi.admin.role.domain.Menu;
 
 import java.lang.reflect.InvocationTargetException;
@@ -20,10 +20,6 @@ public class MenuDTO extends Menu {
     List<MenuDTO> children;
 
     public MenuDTO(Menu menu) {
-        try {
-            BeanUtils.copyProperties(this, menu);
-        } catch (IllegalAccessException | InvocationTargetException e) {
-            e.printStackTrace();
-        }
+        BeanUtils.copyProperties(menu,this);
     }
 }
