@@ -3,6 +3,7 @@ package zhibi.admin.role.controller.console;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -17,12 +18,17 @@ import zhibi.admin.role.common.exception.MessageException;
 import zhibi.admin.role.common.utils.ReturnUtils;
 import zhibi.admin.role.domain.Menu;
 import zhibi.admin.role.domain.Role;
+import zhibi.admin.role.domain.RoleMenu;
+import zhibi.admin.role.dto.MenuTree;
 import zhibi.admin.role.mapper.MenuMapper;
 import zhibi.admin.role.mapper.RoleMapper;
+import zhibi.admin.role.mapper.RoleMenuMapper;
+import zhibi.admin.role.mapper.UserRoleMapper;
 import zhibi.admin.role.service.RoleService;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author 执笔
@@ -32,12 +38,15 @@ import java.util.List;
 public class RoleController extends BaseController {
 
     @Autowired
-    private RoleService roleService;
+    private RoleService    roleService;
     @Autowired
-    private RoleMapper  roleMapper;
-
+    private RoleMapper     roleMapper;
     @Autowired
-    private MenuMapper menuMapper;
+    private MenuMapper     menuMapper;
+    @Autowired
+    private UserRoleMapper userRoleMapper;
+    @Autowired
+    private RoleMenuMapper roleMenuMapper;
 
 
     @Operation("查看角色")
@@ -90,22 +99,70 @@ public class RoleController extends BaseController {
             throw new MessageException(result.getAllErrors().get(0).getDefaultMessage());
         }
         roleService.merge(role);
-        return redirect("/console/role/index","操作成功", attributes);
+        return redirect("/console/role/index", "操作成功", attributes);
     }
 
     @Operation("删除角色")
     @RequestMapping(value = "/delete", method = {RequestMethod.GET})
     @ResponseBody
-    public ModelMap delete(String[] ids) {
-        if (ids == null || ids.length == 0) {
-            return ReturnUtils.error("请先选择要删除的角色", null, null);
-        } else {
-            for (String id : ids) {
-                roleMapper.deleteById(Integer.parseInt(id));
+    public ModelMap delete(Integer id) {
+        roleMapper.deleteById(id);
+        return ReturnUtils.success("操作成功", null, null);
+    }
+
+    /**
+     * 授权页面
+     *
+     * @param roleId
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "/grant", method = {RequestMethod.GET})
+    public String grantForm(String roleId, Model model) {
+        model.addAttribute("roleId", roleId);
+        return "console/role/grant";
+    }
+
+    @Operation("角色授权")
+    @RequestMapping(value = "/grant", method = {RequestMethod.POST})
+    @ResponseBody
+    @Transactional(rollbackFor = Exception.class)
+    public ModelMap grant(Integer roleId, String[] menuIds) {
+        try {
+            roleMenuMapper.delete(new RoleMenu().setRoleId(roleId));
+            if (menuIds != null && roleId != null) {
+                for (String menuId : menuIds) {
+                    RoleMenu roleMenu = new RoleMenu();
+                    roleMenu.setMenuId(Integer.parseInt(menuId));
+                    roleMenu.setRoleId(roleId);
+                    roleMenuMapper.insertSelective(roleMenu);
+                }
             }
             return ReturnUtils.success("操作成功", null, null);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ReturnUtils.error("操作失败", null, null);
         }
     }
+
+    /**
+     * 分配权限树
+     *
+     * @param roleId
+     * @return
+     */
+    @RequestMapping(value = "/menutree", method = {RequestMethod.POST, RequestMethod.GET})
+    @ResponseBody
+    public ModelMap comboTree(Integer roleId) {
+        List<Menu> menuLists = menuMapper.selectAll();
+        RoleMenu   roleMenu  = new RoleMenu();
+        roleMenu.setRoleId(roleId);
+        List<RoleMenu>            roleMenuLists = roleMenuMapper.select(roleMenu);
+        MenuTree                  menuTreeUtil  = new MenuTree(menuLists, roleMenuLists);
+        List<Map<String, Object>> mapList       = menuTreeUtil.buildTree();
+        return ReturnUtils.success(null, mapList, null);
+    }
+
 
    /* @RequestMapping(value = "/combobox", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
@@ -116,53 +173,10 @@ public class RoleController extends BaseController {
         return ReturnUtils.success(null, map, null);
     }*/
 
-   /* @RequestMapping(value = "/menutree", method = {RequestMethod.POST, RequestMethod.GET})
-    @ResponseBody
-    public ModelMap comboTree(String id) {
-        List<Menu> menuLists = menuService.getComboTree(null);
-        RoleMenu   roleMenu  = new RoleMenu();
-        roleMenu.setRoleId(id);
-        List<RoleMenu>            roleMenuLists = roleMenuService.getRoleList(roleMenu);
-        MenuTree                  menuTreeUtil  = new MenuTree(menuLists, roleMenuLists);
-        List<Map<String, Object>> mapList       = menuTreeUtil.buildTree();
-        return ReturnUtils.success(null, mapList, null);
-    }
+   /*
 
-    @RequiresPermissions("role:grant")
-    @RequestMapping(value = "/grant", method = {RequestMethod.POST})
-    @ResponseBody
-    public ModelMap grant(String roleId, String[] menuIds) {
-        try {
-            if (menuIds != null && StringUtils.isNotEmpty(roleId)) {
-                if (StringUtils.isNotEmpty(menuIds.toString())) {
-                    roleMenuService.deleteRoleId(roleId);
-                    for (String menuId : menuIds) {
-                        RoleMenu roleMenu = new RoleMenu();
-                        roleMenu.setMenuId(menuId);
-                        roleMenu.setRoleId(roleId);
-                        roleMenuService.insert(roleMenu);
-                    }
-                }
-            } else if (menuIds == null && StringUtils.isNotEmpty(roleId)) {
-                roleMenuService.deleteRoleId(roleId);
-            }
 
-            // 更新所有用户权限，更严谨的做法是更新与当前角色有关的用户权限
-            // adminShiroRealm.kickOutAllUser(false);
 
-            return ReturnUtils.success("操作成功", null, null);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ReturnUtils.error("操作失败", null, null);
-        }
-    }
-
-    @RequiresPermissions("role:grant")
-    @RequestMapping(value = "/grant", method = {RequestMethod.GET})
-    public String grantForm(String roleId, Model model) {
-        model.addAttribute("roleId", roleId);
-        return "console/role/grant";
-    }
 
     @RequestMapping(value = "/menulist", method = {RequestMethod.GET})
     @ResponseBody

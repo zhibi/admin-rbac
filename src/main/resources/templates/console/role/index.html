@@ -84,7 +84,7 @@
 
     window.operateEvents = {
         'click .remove': function (e, value, row, index) {
-            operaModel.delRow(row.roleId, '/console/role/delete', 'roleId');
+            operaModel.delRow(row.id, '/console/role/delete', 'id');
         },
         'click .grant': function (e, value, row, index) {
             layer.open({
@@ -94,7 +94,7 @@
                 shade: false,
                 maxmin: true, //开启最大化最小化按钮
                 area: ['500px', '600px'],
-                content: '/console/role/grant/?roleId=' + row.roleId
+                content: '/console/role/grant/?roleId=' + row.id
             });
         }
     };
