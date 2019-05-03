@@ -44,7 +44,7 @@ mybatis:
 #mapper配置
 mapper:
   not-empty: false
-  mappers: zhibi.admin.role.common.CustomerMapper
+  mappers: zhibi.fast.mybatis.mapper.BaseMapper
   enum-as-simple-type: true
 
 fast:

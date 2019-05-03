@@ -25,11 +25,11 @@ public class ExceptionController {
      */
     @ExceptionHandler(value = AuthorizationException.class)
     public Object constraintViolationExceptionHandler(HttpServletRequest request, AuthorizationException e) {
-        ModelAndView modelAndView = new ModelAndView("error/error");
-        ModelMap modelMap = modelAndView.getModelMap();
-        modelMap.addAttribute("message","未授权");
-        modelMap.addAttribute("status","401");
-        modelMap.addAttribute("timestamp",new Date());
+        ModelAndView modelAndView = new ModelAndView("error");
+        ModelMap     modelMap     = modelAndView.getModelMap();
+        modelMap.addAttribute("message", "未授权");
+        modelMap.addAttribute("status", "401");
+        modelMap.addAttribute("timestamp", new Date());
         return modelAndView;
     }
 }

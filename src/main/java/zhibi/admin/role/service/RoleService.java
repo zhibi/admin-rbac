@@ -1,8 +1,9 @@
 package zhibi.admin.role.service;
 
-import zhibi.admin.role.common.base.service.BaseService;
+
 import zhibi.admin.role.domain.Menu;
 import zhibi.admin.role.domain.Role;
+import zhibi.fast.mybatis.service.BaseService;
 
 import java.util.List;
 

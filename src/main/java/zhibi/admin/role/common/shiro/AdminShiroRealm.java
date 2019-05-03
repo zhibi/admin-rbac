@@ -1,26 +1,17 @@
 package zhibi.admin.role.common.shiro;
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
-import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.PrincipalCollection;
-import org.apache.shiro.subject.SimplePrincipalCollection;
-import org.apache.shiro.subject.support.DefaultSubjectContext;
 import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import zhibi.admin.role.domain.User;
 import zhibi.admin.role.mapper.MenuMapper;
 import zhibi.admin.role.mapper.UserMapper;
-import zhibi.admin.role.service.MenuService;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -33,11 +24,8 @@ public class AdminShiroRealm extends AuthorizingRealm {
 
     @Autowired
     private UserMapper userMapper;
-
     @Autowired
-    private MenuService menuService;
-    @Autowired
-    private MenuMapper  menuMapper;
+    private MenuMapper menuMapper;
 
 
     /**

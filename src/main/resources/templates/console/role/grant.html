@@ -27,12 +27,12 @@
                 return $('#menuTree').treeview('getNode', [$(this).data('nodeid')]).id;
             }).get().join(",");
             $.post('/console/role/grant', {roleId: _roleId, menuIds: checkNodes}, function (data) {
-                if (data.status === 1) {
-                    layer.msg(data.msg, {icon: 1}, function () {
+                if (data.code === "SUCCESS") {
+                    layer.msg(data.info, {icon: 1}, function () {
                         layerModel.closeParent();
                     });
                 } else {
-                    layer.msg(data.msg);
+                    layer.msg(data.info);
                 }
             })
         });
@@ -41,10 +41,10 @@
 
     function getMenuTree() {
         var _roleId = $("button.btn-primary").data('id');
-        $.getJSON('/console/role/menutree', {id: _roleId}, function (data) {
-            if (data.status === 1) {
+        $.getJSON('/console/role/menuTree', {id: _roleId}, function (data) {
+            if (data.code === "SUCCESS") {
                 $('#menuTree').treeview({
-                    data: data.result,
+                    data: data.response,
                     showIcon: false,
                     highlightSelected: false,
                     showCheckbox: true,

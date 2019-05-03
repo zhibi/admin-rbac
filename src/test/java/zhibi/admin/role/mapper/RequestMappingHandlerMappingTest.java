@@ -8,9 +8,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
-import zhibi.admin.role.common.mybatis.condition.MybatisCondition;
+
 import zhibi.admin.role.domain.Menu;
 import zhibi.admin.role.service.MenuService;
+import zhibi.fast.mybatis.example.MybatisExample;
 
 import java.util.Map;
 import java.util.Set;
@@ -38,10 +39,10 @@ public class RequestMappingHandlerMappingTest {
             // 获取url的Set集合，一个方法可能对应多个url
             Set<String> patterns = info.getPatternsCondition().getPatterns();
             for (String url : patterns) {
-                if (!menuService.isExist(new MybatisCondition().eq("url", url))) {
+                if (!menuService.isExist(new MybatisExample().eq("url", url))) {
                     Menu menu = new Menu()
                             .setUrl(url)
-                            .setParentId(0)
+                            .setParentId(0L)
                             .setSort(0)
                             .setCode(url)
                             .setType(Menu.MenuTypeStatus.MENU)

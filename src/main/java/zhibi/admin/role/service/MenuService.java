@@ -1,7 +1,8 @@
 package zhibi.admin.role.service;
 
-import zhibi.admin.role.common.base.service.BaseService;
+
 import zhibi.admin.role.domain.Menu;
+import zhibi.fast.mybatis.service.BaseService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,5 +20,5 @@ public interface MenuService extends BaseService<Menu> {
      * @param parentId
      * @return
      */
-    List<Menu> getChildMenuList(ArrayList<Menu> menuList, Integer parentId);
+    List<Menu> getChildMenuList(ArrayList<Menu> menuList, Long parentId);
 }

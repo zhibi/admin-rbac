@@ -5,13 +5,13 @@
  Source Server Type    : MySQL
  Source Server Version : 50173
  Source Host           : 120.27.24.193:3306
- Source Schema         : edu-hrm
+ Source Schema         : oc-admin
 
  Target Server Type    : MySQL
  Target Server Version : 50173
  File Encoding         : 65001
 
- Date: 02/05/2019 21:50:45
+ Date: 03/05/2019 16:56:33
 */
 
 SET NAMES utf8mb4;
@@ -26,12 +26,12 @@ CREATE TABLE `log`  (
   `ip` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '',
   `action` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '',
   `data` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
-  `user_id` int(11) NULL DEFAULT 0,
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` bigint(20) NULL DEFAULT 0,
+  `id` bigint(20) NOT NULL DEFAULT 0 AUTO_INCREMENT,
   `create_time` datetime NULL DEFAULT NULL,
   `update_time` datetime NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = MyISAM AUTO_INCREMENT = 190 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 206 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of log
@@ -225,6 +225,22 @@ INSERT INTO `log` VALUES ('admin', '127.0.0.1', '修改用户密码', '{pwd:\"12
 INSERT INTO `log` VALUES ('admin', '127.0.0.1', '修改用户密码', '{pwd:\"ds\",password:\"dsd\",password2:\"sd\",attributes:{},}', 3, 187, '2019-05-02 21:49:34', '2019-05-02 21:49:34');
 INSERT INTO `log` VALUES ('admin', '127.0.0.1', '修改用户密码', '{pwd:\"123\",password:\"123\",password2:\"123\",attributes:{},}', 3, 188, '2019-05-02 21:49:43', '2019-05-02 21:49:43');
 INSERT INTO `log` VALUES ('admin', '127.0.0.1', '修改用户密码', '{pwd:\"123456\",password:\"12345\",password2:\"12345\",attributes:{},}', 3, 189, '2019-05-02 21:49:52', '2019-05-02 21:49:52');
+INSERT INTO `log` VALUES ('admin', '0:0:0:0:0:0:0:1', '登录', '{validUser:{\"username\":\"admin\",\"password\":\"12345\"},bindingResult:null,redirectAttributes:{},}', 3, 190, NULL, NULL);
+INSERT INTO `log` VALUES ('admin', '0:0:0:0:0:0:0:1', '查看用户列表', '{model:{},}', 3, 191, NULL, NULL);
+INSERT INTO `log` VALUES ('admin', '0:0:0:0:0:0:0:1', '查看用户列表', '{model:{},}', 3, 192, NULL, NULL);
+INSERT INTO `log` VALUES ('admin', '0:0:0:0:0:0:0:1', '查看用户列表', '{model:{},}', 3, 193, NULL, NULL);
+INSERT INTO `log` VALUES ('admin', '0:0:0:0:0:0:0:1', '查看用户列表', '{model:{},}', 3, 194, NULL, NULL);
+INSERT INTO `log` VALUES ('admin', '0:0:0:0:0:0:0:1', '登录', '{validUser:{\"username\":\"admin\",\"password\":\"12345\"},bindingResult:null,redirectAttributes:{},}', 3, 195, NULL, NULL);
+INSERT INTO `log` VALUES ('admin', '0:0:0:0:0:0:0:1', '查看用户列表', '{model:{},}', 3, 196, NULL, NULL);
+INSERT INTO `log` VALUES ('admin', '0:0:0:0:0:0:0:1', '查看用户列表', '{model:{},}', 3, 197, NULL, NULL);
+INSERT INTO `log` VALUES ('admin', '0:0:0:0:0:0:0:1', '查看用户列表', '{model:{},}', 3, 198, NULL, NULL);
+INSERT INTO `log` VALUES ('admin', '0:0:0:0:0:0:0:1', '查看用户列表', '{model:{},}', 3, 199, NULL, NULL);
+INSERT INTO `log` VALUES ('admin', '0:0:0:0:0:0:0:1', '用户详情', '{id:3,model:{\"checkRoleId\":\"1,2\",\"roleList\":[{\"pageNum\":1,\"pageSize\":10,\"offset\":0,\"limit\":10,\"id\":1,\"createTime\":{\"month\":\"MAY\",\"year\":2019,\"dayOfMonth\":2,\"dayOfWeek\":\"THURSDAY\",\"dayOfYear\":122,\"monthValue\":5,\"hour\":19,\"minute\":15,\"nano\":0,\"second\":32,\"chronology\":{\"id\":\"ISO\",\"calendarType\":\"iso8601\"}},\"updateTime\":{\"month\":\"MAY\",\"year\":2019,\"dayOfMonth\":2,\"dayOfWeek\":\"THURSDAY\",\"dayOfYear\":122,\"monthValue\":5,\"hour\":19,\"minute\":58,\"nano\":0,\"second\":2,\"chronology\":{\"id\":\"ISO\",\"calendarType\":\"iso8601\"}},\"name\":\"123\",\"enable\":true,\"menuList\":null},{\"pageNum\":1,\"pageSize\":10,\"offset\":0,\"limit\":10,\"id\":2,\"createTime\":{\"month\":\"MAY\",\"year\":2019,\"dayOfMonth\":2,\"dayOfWeek\":\"THURSDAY\",\"dayOfYear\":122,\"monthValue\":5,\"hour\":19,\"minute\":15,\"nano\":0,\"second\":40,\"chronology\":{\"id\":\"ISO\",\"calendarType\":\"iso8601\"}},\"updateTime\":{\"month\":\"MAY\",\"year\":2019,\"dayOfMonth\":2,\"dayOfWeek\":\"THURSDAY\",\"dayOfYear\":122,\"monthValue\":5,\"hour\":19,\"minute\":15,\"nano\":0,\"second\":42,\"chronology\":{\"id\":\"ISO\",\"calendarType\":\"iso8601\"}},\"name\":\"456\",\"enable\":true,\"menuList\":null}],\"user\":{\"pageNum\":1,\"pageSize\":10,\"offset\":0,\"limit\":10,\"id\":3,\"createTime\":{\"month\":\"MAY\",\"year\":2019,\"dayOfMonth\":2,\"dayOfWeek\":\"THURSDAY\",\"dayOfYear\":122,\"monthValue\":5,\"hour\":16,\"minute\":40,\"nano\":0,\"second\":38,\"chronology\":{\"id\":\"ISO\",\"calendarType\":\"iso8601\"}},\"updateTime\":{\"month\":\"MAY\",\"year\":2019,\"dayOfMonth\":2,\"dayOfWeek\":\"THURSDAY\",\"dayOfYear\":122,\"monthValue\":5,\"hour\":19,\"minute\":43,\"nano\":0,\"second\":15,\"chronology\":{\"id\":\"ISO\",\"calendarType\":\"iso8601\"}},\"username\":\"admin\",\"password\":\"ee7c738779396644838b5cec55ba44c7\",\"salt\":\"zhibi\",\"state\":\"ACTIVATION\",\"type\":\"ADMIN\",\"roleList\":null}},}', 3, 200, NULL, NULL);
+INSERT INTO `log` VALUES ('admin', '0:0:0:0:0:0:0:1', '查看角色', '{model:{},}', 3, 201, NULL, NULL);
+INSERT INTO `log` VALUES ('admin', '0:0:0:0:0:0:0:1', '查看角色', '{model:{},}', 3, 202, NULL, NULL);
+INSERT INTO `log` VALUES ('admin', '0:0:0:0:0:0:0:1', '角色授权', '{roleId:2,menuIds:[\"26\",\"27\"],}', 3, 203, NULL, NULL);
+INSERT INTO `log` VALUES ('admin', '0:0:0:0:0:0:0:1', '角色授权', '{roleId:2,menuIds:[\"26\",\"27\",\"28\"],}', 3, 204, NULL, NULL);
+INSERT INTO `log` VALUES ('admin', '0:0:0:0:0:0:0:1', '角色授权', '{roleId:2,menuIds:[\"26\",\"27\",\"28\",\"29\"],}', 3, 205, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for menu
@@ -235,15 +251,15 @@ CREATE TABLE `menu`  (
   `type` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '',
   `url` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '',
   `code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '',
-  `parent_id` int(11) NULL DEFAULT 0,
+  `parent_id` bigint(20) NULL DEFAULT 0,
   `child_num` int(11) NULL DEFAULT 0,
   `sort` int(11) NULL DEFAULT 0,
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` bigint(20) NOT NULL DEFAULT 0 AUTO_INCREMENT,
   `create_time` datetime NULL DEFAULT NULL,
   `update_time` datetime NULL DEFAULT NULL,
   `icon` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = MyISAM AUTO_INCREMENT = 33 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 30 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of menu
@@ -264,11 +280,11 @@ DROP TABLE IF EXISTS `role`;
 CREATE TABLE `role`  (
   `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '',
   `enable` tinyint(1) NULL DEFAULT 0,
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` bigint(20) NOT NULL DEFAULT 0 AUTO_INCREMENT,
   `create_time` datetime NULL DEFAULT NULL,
   `update_time` datetime NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = MyISAM AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of role
@@ -281,21 +297,21 @@ INSERT INTO `role` VALUES ('456', 1, 2, '2019-05-02 19:15:40', '2019-05-02 19:15
 -- ----------------------------
 DROP TABLE IF EXISTS `role_menu`;
 CREATE TABLE `role_menu`  (
-  `role_id` int(11) NULL DEFAULT 0,
-  `menu_id` int(11) NULL DEFAULT 0,
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `role_id` bigint(20) NULL DEFAULT 0,
+  `menu_id` bigint(20) NULL DEFAULT 0,
+  `id` bigint(20) NOT NULL DEFAULT 0 AUTO_INCREMENT,
   `create_time` datetime NULL DEFAULT NULL,
   `update_time` datetime NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = MyISAM AUTO_INCREMENT = 7 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Fixed;
+) ENGINE = InnoDB AUTO_INCREMENT = 16 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of role_menu
 -- ----------------------------
-INSERT INTO `role_menu` VALUES (2, 26, 3, '2019-05-02 20:45:00', '2019-05-02 20:45:00');
-INSERT INTO `role_menu` VALUES (2, 18, 4, '2019-05-02 20:45:00', '2019-05-02 20:45:00');
-INSERT INTO `role_menu` VALUES (2, 27, 5, '2019-05-02 20:45:00', '2019-05-02 20:45:00');
-INSERT INTO `role_menu` VALUES (2, 7, 6, '2019-05-02 20:45:00', '2019-05-02 20:45:00');
+INSERT INTO `role_menu` VALUES (2, 26, 12, NULL, NULL);
+INSERT INTO `role_menu` VALUES (2, 27, 13, NULL, NULL);
+INSERT INTO `role_menu` VALUES (2, 28, 14, NULL, NULL);
+INSERT INTO `role_menu` VALUES (2, 29, 15, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for user
@@ -305,13 +321,13 @@ CREATE TABLE `user`  (
   `username` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '',
   `password` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '',
   `type` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '',
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` bigint(20) NOT NULL DEFAULT 0 AUTO_INCREMENT,
   `create_time` datetime NULL DEFAULT NULL,
   `update_time` datetime NULL DEFAULT NULL,
   `salt` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '',
   `state` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = MyISAM AUTO_INCREMENT = 5 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of user
@@ -323,18 +339,18 @@ INSERT INTO `user` VALUES ('admin', 'ee7c738779396644838b5cec55ba44c7', 'ADMIN',
 -- ----------------------------
 DROP TABLE IF EXISTS `user_role`;
 CREATE TABLE `user_role`  (
-  `user_id` int(11) NULL DEFAULT 0,
-  `role_id` int(11) NULL DEFAULT 0,
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` bigint(20) NULL DEFAULT 0,
+  `role_id` bigint(20) NULL DEFAULT 0,
+  `id` bigint(20) NOT NULL DEFAULT 0 AUTO_INCREMENT,
   `create_time` datetime NULL DEFAULT NULL,
   `update_time` datetime NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = MyISAM AUTO_INCREMENT = 11 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Fixed;
+) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of user_role
 -- ----------------------------
-INSERT INTO `user_role` VALUES (3, 2, 8, '2019-05-02 19:43:16', '2019-05-02 19:43:16');
 INSERT INTO `user_role` VALUES (3, 1, 7, '2019-05-02 19:43:15', '2019-05-02 19:43:15');
+INSERT INTO `user_role` VALUES (3, 2, 8, '2019-05-02 19:43:16', '2019-05-02 19:43:16');
 
 SET FOREIGN_KEY_CHECKS = 1;

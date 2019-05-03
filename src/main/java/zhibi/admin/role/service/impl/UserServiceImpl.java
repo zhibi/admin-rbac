@@ -5,15 +5,15 @@ import org.apache.shiro.crypto.SecureRandomNumberGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import zhibi.admin.role.common.base.service.BaseServiceImpl;
-import zhibi.admin.role.common.exception.MessageException;
-import zhibi.admin.role.common.mybatis.condition.MybatisCondition;
 import zhibi.admin.role.common.utils.PasswordUtils;
 import zhibi.admin.role.domain.User;
 import zhibi.admin.role.domain.UserRole;
 import zhibi.admin.role.mapper.UserMapper;
 import zhibi.admin.role.mapper.UserRoleMapper;
 import zhibi.admin.role.service.UserService;
+import zhibi.fast.commons.exception.MessageException;
+import zhibi.fast.mybatis.example.MybatisExample;
+import zhibi.fast.mybatis.service.impl.BaseServiceImpl;
 
 /**
  * @author 执笔
@@ -31,7 +31,7 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, User> implement
     @Override
     public void updateOrSaveUser(User user, String[] roleIds) {
         if (user.getId() == null) {
-            boolean exist = isExist(new MybatisCondition().eq("username", user.getUsername()));
+            boolean exist = isExist(new MybatisExample().eq("username", user.getUsername()));
             if (exist) {
                 throw new MessageException("用户名已存在");
             }
@@ -45,7 +45,7 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, User> implement
             user.setType(User.UserTypeEnum.USER);
             userMapper.insertSelective(user);
         } else {
-            boolean exist = isExist(new MybatisCondition().eq("username", user.getUsername()).eqNot("id", user.getId()));
+            boolean exist = isExist(new MybatisExample().eq("username", user.getUsername()).eqNot("id", user.getId()));
             if (exist) {
                 throw new MessageException("用户名已存在");
             }
@@ -68,7 +68,7 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, User> implement
             for (String roleId : roleIds) {
                 UserRole userRole = new UserRole()
                         .setUserId(user.getId())
-                        .setRoleId(Integer.parseInt(roleId));
+                        .setRoleId(Long.parseLong(roleId));
                 userRoleMapper.insertSelective(userRole);
             }
         }

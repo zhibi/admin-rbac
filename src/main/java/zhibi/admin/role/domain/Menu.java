@@ -2,7 +2,7 @@ package zhibi.admin.role.domain;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
-import zhibi.admin.role.common.base.dto.BaseDomain;
+import zhibi.fast.mybatis.dto.BaseDomain;
 
 import javax.persistence.Column;
 import javax.validation.constraints.NotEmpty;
@@ -27,7 +27,7 @@ public class Menu extends BaseDomain {
     @NotEmpty(message = "菜单标识不能为空")
     private String code;
 
-    private Integer parentId;
+    private Long parentId;
 
     private Integer childNum;
 

@@ -42,8 +42,8 @@
             },
             responseHandler: function (res) {//在获取到数据，渲染表格之前，修改数据源
                 return {
-                    rows: res.result.pageInfo.list,
-                    total: res.result.pageInfo.total
+                    rows: res.response.list,
+                    total: res.response.total
                 }
             }
         });
@@ -65,14 +65,14 @@
             delRow: function (rowid, url, field) {
                 layer.confirm('确定删除吗?', function () {
                     $.getJSON(url, {id: rowid}, function (ret) {
-                        if (ret.status === 1) {
+                        if (ret.code === "SUCCESS") {
                             layer.msg(ret.msg, {icon: 1});
                             $table.bootstrapTable('remove', {
                                 field: field,
                                 values: [rowid]
                             });
                         } else {
-                            layer.msg(ret.msg, {icon: 2});
+                            layer.msg(ret.info, {icon: 2});
                         }
                     });
                 });

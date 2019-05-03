@@ -5,17 +5,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import zhibi.admin.role.common.annotation.Operation;
-import zhibi.admin.role.common.controller.BaseController;
-import zhibi.admin.role.common.exception.MessageException;
-import zhibi.admin.role.common.utils.ReturnUtils;
 import zhibi.admin.role.domain.Menu;
 import zhibi.admin.role.domain.Role;
 import zhibi.admin.role.domain.RoleMenu;
@@ -25,6 +20,10 @@ import zhibi.admin.role.mapper.RoleMapper;
 import zhibi.admin.role.mapper.RoleMenuMapper;
 import zhibi.admin.role.mapper.UserRoleMapper;
 import zhibi.admin.role.service.RoleService;
+import zhibi.fast.commons.exception.MessageException;
+import zhibi.fast.commons.response.JsonResponse;
+import zhibi.fast.spring.boot.annotation.Operation;
+import zhibi.fast.spring.boot.controller.BaseController;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -63,16 +62,13 @@ public class RoleController extends BaseController {
      */
     @RequestMapping(value = "/list", method = {RequestMethod.GET})
     @ResponseBody
-    public ModelMap list(Role role) {
-        ModelMap       map      = new ModelMap();
+    public JsonResponse list(Role role) {
         PageInfo<Role> pageInfo = roleService.selectPage(role);
         for (Role item : pageInfo.getList()) {
             List<Menu> menuList = menuMapper.selectMenuByRoleId(item.getId());
             item.setMenuList(menuList);
         }
-        map.put("pageInfo", pageInfo);
-        map.put("queryParam", role);
-        return ReturnUtils.success("加载成功", map, null);
+        return JsonResponse.success("加载成功", pageInfo);
     }
 
     /**
@@ -105,9 +101,9 @@ public class RoleController extends BaseController {
     @Operation("删除角色")
     @RequestMapping(value = "/delete", method = {RequestMethod.GET})
     @ResponseBody
-    public ModelMap delete(Integer id) {
+    public JsonResponse delete(Long id) {
         roleMapper.deleteById(id);
-        return ReturnUtils.success("操作成功", null, null);
+        return JsonResponse.success("操作成功");
     }
 
     /**
@@ -127,21 +123,21 @@ public class RoleController extends BaseController {
     @RequestMapping(value = "/grant", method = {RequestMethod.POST})
     @ResponseBody
     @Transactional(rollbackFor = Exception.class)
-    public ModelMap grant(Integer roleId, String[] menuIds) {
+    public JsonResponse grant(Long roleId, String[] menuIds) {
         try {
             roleMenuMapper.delete(new RoleMenu().setRoleId(roleId));
             if (menuIds != null && roleId != null) {
                 for (String menuId : menuIds) {
                     RoleMenu roleMenu = new RoleMenu();
-                    roleMenu.setMenuId(Integer.parseInt(menuId));
+                    roleMenu.setMenuId(Long.parseLong(menuId));
                     roleMenu.setRoleId(roleId);
                     roleMenuMapper.insertSelective(roleMenu);
                 }
             }
-            return ReturnUtils.success("操作成功", null, null);
+            return JsonResponse.success("操作成功");
         } catch (Exception e) {
             e.printStackTrace();
-            return ReturnUtils.error("操作失败", null, null);
+            return JsonResponse.fail("操作失败");
         }
     }
 
@@ -151,15 +147,15 @@ public class RoleController extends BaseController {
      * @param roleId
      * @return
      */
-    @RequestMapping(value = "/menutree", method = {RequestMethod.POST, RequestMethod.GET})
+    @RequestMapping(value = "/menuTree", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
-    public ModelMap comboTree(Integer roleId) {
+    public JsonResponse menuTree(Long roleId) {
         List<Menu> menuLists = menuMapper.selectAll();
         RoleMenu   roleMenu  = new RoleMenu();
         roleMenu.setRoleId(roleId);
         List<RoleMenu>            roleMenuLists = roleMenuMapper.select(roleMenu);
         MenuTree                  menuTreeUtil  = new MenuTree(menuLists, roleMenuLists);
         List<Map<String, Object>> mapList       = menuTreeUtil.buildTree();
-        return ReturnUtils.success(null, mapList, null);
+        return JsonResponse.success("success", mapList);
     }
 }

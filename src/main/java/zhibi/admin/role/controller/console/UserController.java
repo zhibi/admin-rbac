@@ -1,19 +1,12 @@
 package zhibi.admin.role.controller.console;
 
 import com.github.pagehelper.PageInfo;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import zhibi.admin.role.common.annotation.Operation;
-import zhibi.admin.role.common.controller.BaseController;
-import zhibi.admin.role.common.exception.MessageException;
-import zhibi.admin.role.common.utils.PasswordUtils;
-import zhibi.admin.role.common.utils.ReturnUtils;
 import zhibi.admin.role.domain.Role;
 import zhibi.admin.role.domain.User;
 import zhibi.admin.role.domain.UserRole;
@@ -22,6 +15,10 @@ import zhibi.admin.role.mapper.UserMapper;
 import zhibi.admin.role.mapper.UserRoleMapper;
 import zhibi.admin.role.service.RoleService;
 import zhibi.admin.role.service.UserService;
+import zhibi.fast.commons.exception.MessageException;
+import zhibi.fast.commons.response.JsonResponse;
+import zhibi.fast.spring.boot.annotation.Operation;
+import zhibi.fast.spring.boot.controller.BaseController;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
@@ -84,16 +81,13 @@ public class UserController extends BaseController {
      */
     @RequestMapping(value = "/list", method = {RequestMethod.GET})
     @ResponseBody
-    public ModelMap list(User user) {
-        ModelMap       map      = new ModelMap();
+    public JsonResponse list(User user) {
         PageInfo<User> pageInfo = userService.selectPage(user);
         for (User list : pageInfo.getList()) {
             List<Role> roleList = roleMapper.selectRoleListByUserId(list.getId());
             list.setRoleList(roleList);
         }
-        map.put("pageInfo", pageInfo);
-        map.put("queryParam", user);
-        return ReturnUtils.success("加载成功", map, null);
+        return JsonResponse.success("加载成功", pageInfo);
     }
 
     @Operation("更新用户信息")
@@ -113,9 +107,9 @@ public class UserController extends BaseController {
     @Operation("删除用户")
     @RequestMapping(value = "/delete", method = {RequestMethod.GET})
     @ResponseBody
-    public ModelMap delete(Integer id) {
+    public JsonResponse delete(Long id) {
         userMapper.deleteById(id);
-        return ReturnUtils.success("删除成功", null, null);
+        return JsonResponse.success("删除成功");
     }
 
 }

@@ -2,7 +2,8 @@ package zhibi.admin.role.domain;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
-import zhibi.admin.role.common.base.dto.BaseDomain;
+import zhibi.fast.mybatis.dto.BaseDomain;
+
 
 import javax.persistence.Transient;
 import javax.validation.constraints.NotEmpty;

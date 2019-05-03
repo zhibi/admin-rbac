@@ -1,7 +1,7 @@
 package zhibi.admin.role.domain;
 
 import lombok.Data;
-import zhibi.admin.role.common.base.dto.BaseDomain;
+import zhibi.fast.mybatis.dto.BaseDomain;
 
 import javax.persistence.Column;
 
@@ -28,5 +28,5 @@ public class Log extends BaseDomain {
     /**
      * 用户ID
      */
-    private Integer userId;
+    private Long userId;
 }

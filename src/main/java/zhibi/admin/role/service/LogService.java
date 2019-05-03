@@ -1,8 +1,9 @@
 package zhibi.admin.role.service;
 
-import zhibi.admin.role.common.base.service.BaseService;
+
 import zhibi.admin.role.domain.Log;
 import zhibi.admin.role.domain.User;
+import zhibi.fast.mybatis.service.BaseService;
 
 /**
  * @author 执笔

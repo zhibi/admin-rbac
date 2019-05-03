@@ -4,7 +4,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import zhibi.admin.role.common.controller.BaseController;
+import zhibi.fast.mybatis.mapper.BaseMapper;
+import zhibi.fast.spring.boot.controller.BaseController;
 
 /**
  * @author 执笔

@@ -1,14 +1,14 @@
 package zhibi.admin.role.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
-import zhibi.admin.role.common.CustomerMapper;
 import zhibi.admin.role.domain.User;
+import zhibi.fast.mybatis.mapper.BaseMapper;
 
 /**
  * @author 执笔
  */
 @Mapper
-public interface UserMapper extends CustomerMapper<User> {
+public interface UserMapper extends BaseMapper<User> {
     /**
      * 根据用户名获取用户
      *
@@ -22,5 +22,5 @@ public interface UserMapper extends CustomerMapper<User> {
      *
      * @param id
      */
-    void deleteById(Integer id);
+    void deleteById(Long id);
 }

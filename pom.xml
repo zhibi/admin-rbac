@@ -175,6 +175,16 @@
             <artifactId>fast-commons</artifactId>
             <version>1.0.0</version>
         </dependency>
+        <dependency>
+            <groupId>zhibi-fast</groupId>
+            <artifactId>fast-mybatis</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>zhibi-fast</groupId>
+            <artifactId>fast-spring-boot</artifactId>
+            <version>1.0.0</version>
+        </dependency>
 
     </dependencies>
 

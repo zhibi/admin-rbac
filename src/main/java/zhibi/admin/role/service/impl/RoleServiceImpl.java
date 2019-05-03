@@ -2,11 +2,13 @@ package zhibi.admin.role.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import zhibi.admin.role.common.base.service.BaseServiceImpl;
-import zhibi.admin.role.common.mybatis.condition.MybatisCondition;
+
+
 import zhibi.admin.role.domain.Role;
 import zhibi.admin.role.mapper.RoleMapper;
 import zhibi.admin.role.service.RoleService;
+import zhibi.fast.mybatis.example.MybatisExample;
+import zhibi.fast.mybatis.service.impl.BaseServiceImpl;
 
 import java.util.List;
 
@@ -21,7 +23,7 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleMapper, Role> implement
 
     @Override
     public List<Role> getAllEnable() {
-        MybatisCondition example = new MybatisCondition()
+        MybatisExample example = new MybatisExample()
                 .eq("enable", 1);
         return roleMapper.selectByExample(example);
     }

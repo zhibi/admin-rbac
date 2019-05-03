@@ -9,11 +9,11 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.stereotype.Component;
-import zhibi.admin.role.common.annotation.Operation;
-import zhibi.admin.role.common.utils.IpUtil;
-import zhibi.admin.role.common.utils.JSONUtils;
 import zhibi.admin.role.common.utils.ShiroUtils;
 import zhibi.admin.role.service.LogService;
+import zhibi.fast.commons.utils.IPUtils;
+import zhibi.fast.commons.utils.JSONUtils;
+import zhibi.fast.spring.boot.annotation.Operation;
 
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
@@ -29,7 +29,7 @@ import java.lang.reflect.Parameter;
 @Slf4j
 @Component
 @ConditionalOnClass(ProceedingJoinPoint.class)
-public class OperationLogAspect {
+public class OperationLogDbAspect {
 
     @Autowired
     private LogService         logService;
@@ -39,7 +39,7 @@ public class OperationLogAspect {
     /**
      * 切面
      */
-    @Pointcut("@annotation(zhibi.admin.role.common.annotation.Operation)")
+    @Pointcut("@annotation(zhibi.fast.spring.boot.annotation.Operation)")
     public void pointcut() {
     }
 
@@ -55,13 +55,12 @@ public class OperationLogAspect {
         Method    method    = ((MethodSignature) joinPoint.getSignature()).getMethod();
         Operation operation = method.getAnnotation(Operation.class);
         Object    proceed   = joinPoint.proceed();
-        logService.insertLog(ShiroUtils.getUserInfo(), IpUtil.getIpAddr(request), operation.value(), getParamLog(joinPoint, method).toString());
+        logService.insertLog(ShiroUtils.getUserInfo(), IPUtils.getLocalIp(request), operation.value(), getParamLog(joinPoint, method).toString());
         return proceed;
     }
 
     /**
      * 得到请求参数日志
-     * 忽略掉不需要打印的参数
      *
      * @param joinPoint
      * @param method
